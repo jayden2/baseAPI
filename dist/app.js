@@ -14,9 +14,7 @@ app.use(bodyparser.urlencoded({
   extended: true
 }));
 
-app.use(bodyparser.json({
-  inflate: false
-}));
+app.use(bodyparser.json());
 
 port = process.env.PORT || 1337;
 

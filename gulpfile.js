@@ -37,6 +37,15 @@ gulp.task('c-app', function() {
 	gutil.log('Gulp completed app coffee compile!')
 });
 
+//convert routes from coffee to js
+gulp.task('c-usermodel', function() {
+	gutil.log('Gulp compiling app coffee..')
+	gulp.src('./src/models/user.coffee')
+	.pipe(coffee({bare: true}).on('error', gutil.log))
+	.pipe(gulp.dest('./dist/models/'));
+	gutil.log('Gulp completed app coffee compile!')
+});
+
 //see if gulp is running and then do coffee task as well
 gulp.task('default', function() {
 	return gutil.log('Gulp up and running!')

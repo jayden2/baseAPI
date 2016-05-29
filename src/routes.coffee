@@ -7,6 +7,10 @@ module.exports = configure: (app, router) ->
 	router.get '/', (req, res) ->
 		res.json message: 'Base API up and running! What would you like sir?'
 
+	#authenticate!
+	router.post '/authenticate/', (req, res) ->
+		user.checkValidUser app, req.body, res
+
 	##----------------##
 	##--USER ROUTES---##
 	##----------------##

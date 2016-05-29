@@ -1,4 +1,6 @@
-var User, connection;
+var User, connection, jwt;
+
+jwt = require('jsonwebtoken');
 
 connection = require('../connection');
 
@@ -27,11 +29,33 @@ function User() {
       });
     });
   };
-  this.checkValidUser = function(user, res) {
+  this.checkValidUser = function(app, user, res) {
     connection.acquire(function(err, con) {
-      con.query('SELECT id, COUNT(id) as user_count FROM users WHERE email = ? AND password = ?', [user.email, user.password], function(err, result) {
+      con.query('SELECT *, COUNT(id) as user_count FROM users WHERE email = ?', [user.email], function(err, result) {
+        var token;
         con.release();
-        res.send(result);
+        if (result[0].user_count !== 1) {
+          res.send({
+            success: false,
+            message: 'Authentication failed. User not found.'
+          });
+        } else if (result[0].user_count === 1) {
+          if (user.password !== result[0].password) {
+            res.send({
+              success: false,
+              message: 'Authentication failed. Wrong password.'
+            });
+          } else {
+            token = jwt.sign(user, 'superSecret', {
+              expiresIn: '7 days'
+            });
+            res.send({
+              success: true,
+              message: 'Token Get!',
+              token: token
+            });
+          }
+        }
       });
     });
   };

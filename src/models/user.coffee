@@ -1,3 +1,4 @@
+jwt = require 'jsonwebtoken'
 connection = require '../connection'
 #get, create, update and delte
 #function User() {
@@ -34,15 +35,32 @@ User = ->
 		return
 	#check if user exists when a user tries to login
 	#do connection, count if user exists
-	@checkValidUser = (user, res) ->
+	@checkValidUser = (app, user, res) ->
 		connection.acquire (err, con) ->
-			con.query 'SELECT id, COUNT(id) as user_count FROM users WHERE email = ? AND password = ?', [user.email, user.password], (err, result) ->
+			con.query 'SELECT *, COUNT(id) as user_count FROM users WHERE email = ?', [user.email], (err, result) ->
 				con.release()
-				res.send result
+				#if username doesnt exist, dont auth
+				if result[0].user_count != 1
+					res.send
+						success: false
+						message: 'Authentication failed. User not found.'
+				else if result[0].user_count == 1
+					#if password doesnt match, dont auth
+					if user.password != result[0].password
+						res.send
+							success: false
+							message: 'Authentication failed. Wrong password.'
+					else
+						#create token that expires in 7 days
+						token = jwt.sign(user, 'superSecret', expiresIn: '7 days')
+						#send token to user
+						res.send
+							success: true
+							message: 'Token Get!',
+							token: token
 				return
 			return
 		return
-	#create
 	#do connection, insert user data into database
 	@createUser = (user, res) ->
 		connection.acquire (err, con) ->

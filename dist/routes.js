@@ -11,6 +11,9 @@ module.exports = {
         message: 'Base API up and running! What would you like sir?'
       });
     });
+    router.post('/authenticate/', function(req, res) {
+      return user.checkValidUser(app, req.body, res);
+    });
     router.get('/users/', function(req, res) {
       return user.getAllUsers(res);
     });
