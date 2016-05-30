@@ -41,7 +41,6 @@ User = ->
 		connection.acquire (err, con) ->
 			con.query 'SELECT *, COUNT(id) as user_count FROM users WHERE email = ?', [user.email], (err, result) ->
 				con.release()
-				pwd = hashPassword(user.password)
 				#if username doesnt exist, dont auth
 				if result[0].user_count != 1
 					res.send
@@ -49,7 +48,7 @@ User = ->
 						message: 'Authentication failed. User not found.'
 				else if result[0].user_count == 1
 					#if password doesnt match, dont auth
-					if !bcrypt.compareSync result[0].password, pwd
+					if !bcrypt.compareSync user.password, result[0].password
 						res.send
 							success: false
 							message: 'Authentication failed. Wrong password.'
@@ -149,6 +148,7 @@ User = ->
 	#create hash
 	hashPassword = (pwd) ->
 		hash = bcrypt.hashSync pwd
+		console.log hash
 		return hash
 
 module.exports = new User()

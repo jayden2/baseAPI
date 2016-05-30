@@ -37,16 +37,15 @@ User = function() {
   this.checkValidUser = function(app, user, res) {
     connection.acquire(function(err, con) {
       con.query('SELECT *, COUNT(id) as user_count FROM users WHERE email = ?', [user.email], function(err, result) {
-        var pwd, token;
+        var token;
         con.release();
-        pwd = hashPassword(user.password);
         if (result[0].user_count !== 1) {
           res.send({
             success: false,
             message: 'Authentication failed. User not found.'
           });
         } else if (result[0].user_count === 1) {
-          if (!bcrypt.compareSync(result[0].password, pwd)) {
+          if (!bcrypt.compareSync(user.password, result[0].password)) {
             res.send({
               success: false,
               message: 'Authentication failed. Wrong password.'
@@ -149,6 +148,7 @@ User = function() {
   hashPassword = function(pwd) {
     var hash;
     hash = bcrypt.hashSync(pwd);
+    console.log(hash)
     return hash;
   };
 };
