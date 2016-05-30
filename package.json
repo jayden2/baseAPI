@@ -8,10 +8,12 @@
   "author": "Jayden Spencer",
   "license": "ISC",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
-    "mysql": "^2.10.2",
-    "jsonwebtoken": "^7.0.0"
+    "jsonwebtoken": "^7.0.0",
+    "morgan": "^1.7.0",
+    "mysql": "^2.10.2"
   },
   "devDependencies": {
     "gulp": "^3.9.1",

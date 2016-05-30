@@ -1,13 +1,18 @@
-var User, connection, jwt;
+var User, bcrypt, connection, jwt, secretPassword;
 
 jwt = require('jsonwebtoken');
 
+bcrypt = require('bcrypt-nodejs');
+
 connection = require('../connection');
 
-function User() {
+secretPassword = 'superSpecialSecretPasswordThatNooneWouldEverGuess1';
+
+User = function() {
+  var hashPassword;
   this.getAllUsers = function(res) {
     connection.acquire(function(err, con) {
-      con.query('SELECT * FROM users', function(err, result) {
+      con.query('SELECT id, username, email FROM users', function(err, result) {
         con.release();
         res.send(result);
       });
@@ -15,7 +20,7 @@ function User() {
   };
   this.getSingleUser = function(id, res) {
     connection.acquire(function(err, con) {
-      con.query('SELECT * FROM users WHERE id = ?', [id], function(err, result) {
+      con.query('SELECT id, username, password FROM users WHERE id = ?', [id], function(err, result) {
         con.release();
         res.send(result);
       });
@@ -32,21 +37,22 @@ function User() {
   this.checkValidUser = function(app, user, res) {
     connection.acquire(function(err, con) {
       con.query('SELECT *, COUNT(id) as user_count FROM users WHERE email = ?', [user.email], function(err, result) {
-        var token;
+        var pwd, token;
         con.release();
+        pwd = hashPassword(user.password);
         if (result[0].user_count !== 1) {
           res.send({
             success: false,
             message: 'Authentication failed. User not found.'
           });
         } else if (result[0].user_count === 1) {
-          if (user.password !== result[0].password) {
+          if (!bcrypt.compareSync(result[0].password, pwd)) {
             res.send({
               success: false,
               message: 'Authentication failed. Wrong password.'
             });
           } else {
-            token = jwt.sign(user, 'superSecret', {
+            token = jwt.sign(user, secretPassword, {
               expiresIn: '7 days'
             });
             res.send({
@@ -59,9 +65,34 @@ function User() {
       });
     });
   };
+  this.verifyUser = function(req, res, next) {
+    var token;
+    console.log('API Accessed.');
+    token = req.body.token || req.query.token || req.headers['x-access-token'];
+    if (token) {
+      jwt.verify(token, secretPassword, function(err, decode) {
+        if (err) {
+          return res.status(403).send({
+            success: false,
+            message: 'Failed to authenticate token.'
+          });
+        } else {
+          req.decode = decode;
+          next();
+        }
+      });
+    } else {
+      return res.status(403).send({
+        success: false,
+        message: 'No token given. Please send request with a token.'
+      });
+    }
+  };
   this.createUser = function(user, res) {
+    var pwd;
+    pwd = hashPassword(user.password);
     connection.acquire(function(err, con) {
-      con.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [user.username, user.email, user.password], function(err, result) {
+      con.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [user.username, user.email, pwd], function(err, result) {
         con.release();
         if (err) {
           res.send({
@@ -78,8 +109,10 @@ function User() {
     });
   };
   this.updateUser = function(user, id, res) {
+    var pwd;
+    pwd = hashPassword(user.password);
     connection.acquire(function(err, con) {
-      con.query('UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?', [user.username, user.email, user.password, id], function(err, result) {
+      con.query('UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?', [user.username, user.email, pwd, id], function(err, result) {
         con.release();
         if (err) {
           res.send({
@@ -112,6 +145,11 @@ function User() {
         }
       });
     });
+  };
+  hashPassword = function(pwd) {
+    var hash;
+    hash = bcrypt.hashSync(pwd);
+    return hash;
   };
 };
 

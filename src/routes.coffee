@@ -7,9 +7,17 @@ module.exports = configure: (app, router) ->
 	router.get '/', (req, res) ->
 		res.json message: 'Base API up and running! What would you like sir?'
 
-	#authenticate!
+	#authenticate user!
 	router.post '/authenticate/', (req, res) ->
 		user.checkValidUser app, req.body, res
+
+	#create user
+	router.post '/users/', (req, res) ->
+		user.createUser req.body, re
+
+	#api middleware for all requests
+	router.use (req, res, next) ->
+		user.verifyUser req, res, next
 
 	##----------------##
 	##--USER ROUTES---##
@@ -23,16 +31,9 @@ module.exports = configure: (app, router) ->
 	router.get '/users/:id/', (req, res) ->
 		user.getSingleUser req.params.id, res
 	
-	#authenticate user
-	#valid email
-	###
-	checkValidEmail
-	checkValidUser
-	###
-
-	#create user
-	router.post '/users/', (req, res) ->
-		user.createUser req.body, res
+	#checkValidEmail
+	router.get '/users/:email/check/', (req, res) ->
+		user.checkValidEmail req.params.email, res
 	
 	#update user
 	router.put '/users/:id/', (req, res) ->

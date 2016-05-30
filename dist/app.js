@@ -1,8 +1,10 @@
-var app, bodyparser, connection, express, port, router, routes, server;
+var app, bodyparser, connection, express, morgan, port, router, routes, server;
 
 express = require('express');
 
 bodyparser = require('body-parser');
+
+morgan = require('morgan');
 
 connection = require('./connection');
 
@@ -17,6 +19,15 @@ app.use(bodyparser.urlencoded({
 app.use(bodyparser.json());
 
 port = process.env.PORT || 1337;
+
+app.use(function(req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+  return next();
+});
+
+app.use(morgan('dev'));
 
 router = express.Router();
 
