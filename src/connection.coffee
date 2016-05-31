@@ -8,7 +8,7 @@ Connection = ->
 	@init = ->
 		@pool = mysql.createPool(
 			connectionLimit: 10
-			host: 'https://student.mydesign.central.wa.edu.au'
+			host: 'student.mydesign.central.wa.edu.au'
 			user: '041501736_base'
 			password: '#Cyur851'
 			database: '041501736_moviebase')
