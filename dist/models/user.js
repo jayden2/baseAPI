@@ -148,7 +148,6 @@ User = function() {
   hashPassword = function(pwd) {
     var hash;
     hash = bcrypt.hashSync(pwd);
-    console.log(hash)
     return hash;
   };
 };

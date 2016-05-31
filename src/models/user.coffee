@@ -148,7 +148,6 @@ User = ->
 	#create hash
 	hashPassword = (pwd) ->
 		hash = bcrypt.hashSync pwd
-		console.log hash
 		return hash
 
 module.exports = new User()

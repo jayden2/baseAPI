@@ -8,10 +8,10 @@ Connection = ->
 	@init = ->
 		@pool = mysql.createPool(
 			connectionLimit: 10
-			host: 'localhost'
-			user: 'root'
-			password: ''
-			database: 'movie_base')
+			host: 'https://student.mydesign.central.wa.edu.au'
+			user: '041501736_base'
+			password: '#Cyur851'
+			database: '041501736_moviebase')
 	#connect and get callback
 	@acquire = (callback) ->
 		@pool.getConnection (err, connection) ->

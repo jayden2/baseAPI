@@ -39,11 +39,20 @@ gulp.task('c-app', function() {
 
 //convert routes from coffee to js
 gulp.task('c-usermodel', function() {
-	gutil.log('Gulp compiling app coffee..')
+	gutil.log('Gulp compiling user model coffee..')
 	gulp.src('./src/models/user.coffee')
 	.pipe(coffee({bare: true}).on('error', gutil.log))
 	.pipe(gulp.dest('./dist/models/'));
-	gutil.log('Gulp completed app coffee compile!')
+	gutil.log('Gulp completed user model coffee compile!')
+});
+
+//convert routes from coffee to js
+gulp.task('c-connection', function() {
+	gutil.log('Gulp compiling connection coffee..')
+	gulp.src('./src/connection.coffee')
+	.pipe(coffee({bare: true}).on('error', gutil.log))
+	.pipe(gulp.dest('./dist/'));
+	gutil.log('Gulp completed connection coffee compile!')
 });
 
 //see if gulp is running and then do coffee task as well
