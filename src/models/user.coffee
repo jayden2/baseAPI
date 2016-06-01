@@ -19,7 +19,7 @@ User = ->
 	#do connection, select one user from database
 	@getSingleUser = (id, res) ->
 		connection.acquire (err, con) ->
-			con.query 'SELECT id, username, password FROM users WHERE id = ?', [id], (err, result) ->
+			con.query 'SELECT id, username, email FROM users WHERE id = ?', [id], (err, result) ->
 				con.release()
 				res.send result
 				return
@@ -95,12 +95,12 @@ User = ->
 				con.release()
 				#error check if succesful query or not
 				if err
-					res.send
-						status: 1
-						message: 'failed creating user'
+					return res.status(403).send(
+						success: false
+						message: 'failed creating user')
 				else
 					res.send
-						status: 0
+						success: true
 						message: 'user created successfully'
 				return
 			return
@@ -115,12 +115,12 @@ User = ->
 				con.release()
 				#error check if successful query or not
 				if err
-					res.send
-						status: 1
-						message: 'user update failed'
+					return res.status(403).send(
+						success: false
+						message: 'user update failed')
 				else
 					res.send
-						status: 0
+						success: true
 						message: 'user updated successfully'
 				return
 			return
@@ -134,12 +134,12 @@ User = ->
 				con.release()
 				#error check if successful query or not
 				if err
-					res.send
-						status: 1
-						message: 'failed deleting user'
+					return res.status(403).send(
+						success: false
+						message: 'failed deleting user')
 				else
 					res.send
-						status: 0
+						success: true
 						message: 'user deleted successfully'
 				return
 			return

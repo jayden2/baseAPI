@@ -20,7 +20,7 @@ User = function() {
   };
   this.getSingleUser = function(id, res) {
     connection.acquire(function(err, con) {
-      con.query('SELECT id, username, password FROM users WHERE id = ?', [id], function(err, result) {
+      con.query('SELECT id, username, email FROM users WHERE id = ?', [id], function(err, result) {
         con.release();
         res.send(result);
       });
@@ -94,13 +94,13 @@ User = function() {
       con.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [user.username, user.email, pwd], function(err, result) {
         con.release();
         if (err) {
-          res.send({
-            status: 1,
+          return res.status(403).send({
+            success: false,
             message: 'failed creating user'
           });
         } else {
           res.send({
-            status: 0,
+            success: true,
             message: 'user created successfully'
           });
         }
@@ -114,13 +114,13 @@ User = function() {
       con.query('UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?', [user.username, user.email, pwd, id], function(err, result) {
         con.release();
         if (err) {
-          res.send({
-            status: 1,
+          return res.status(403).send({
+            success: false,
             message: 'user update failed'
           });
         } else {
           res.send({
-            status: 0,
+            success: true,
             message: 'user updated successfully'
           });
         }
@@ -132,13 +132,13 @@ User = function() {
       con.query('DELETE FROM users WHERE id = ?', [id], function(err, result) {
         con.release();
         if (err) {
-          res.send({
-            status: 1,
+          return res.status(403).send({
+            success: false,
             message: 'failed deleting user'
           });
         } else {
           res.send({
-            status: 0,
+            success: true,
             message: 'user deleted successfully'
           });
         }
