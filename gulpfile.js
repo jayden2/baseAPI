@@ -10,7 +10,7 @@ gulp.task('coffee', function() {
 	.pipe(gulp.dest('./dist/'));
 });
 
-//convert model from coffee to js
+//convert models from coffee to js
 gulp.task('c-model', function() {
 	gutil.log('Gulp compiling models coffee..')
 	gulp.src('./src/models/*.coffee')
@@ -28,7 +28,7 @@ gulp.task('c-routes', function() {
 	gutil.log('Gulp completed routes coffee compile!')
 });
 
-//convert routes from coffee to js
+//convert app from coffee to js
 gulp.task('c-app', function() {
 	gutil.log('Gulp compiling app coffee..')
 	gulp.src('./src/app.coffee')
@@ -37,7 +37,7 @@ gulp.task('c-app', function() {
 	gutil.log('Gulp completed app coffee compile!')
 });
 
-//convert routes from coffee to js
+//convert user model from coffee to js
 gulp.task('c-usermodel', function() {
 	gutil.log('Gulp compiling user model coffee..')
 	gulp.src('./src/models/user.coffee')
@@ -46,7 +46,7 @@ gulp.task('c-usermodel', function() {
 	gutil.log('Gulp completed user model coffee compile!')
 });
 
-//convert routes from coffee to js
+//convert connection from coffee to js
 gulp.task('c-connection', function() {
 	gutil.log('Gulp compiling connection coffee..')
 	gulp.src('./src/connection.coffee')
@@ -55,7 +55,7 @@ gulp.task('c-connection', function() {
 	gutil.log('Gulp completed connection coffee compile!')
 });
 
-//see if gulp is running and then do coffee task as well
-gulp.task('default', function() {
+//see if gulp is running and then do all coffee tasks as well
+gulp.task('default', ['coffee', 'c-routes'], function() {
 	return gutil.log('Gulp up and running!')
 });
