@@ -41,12 +41,12 @@ Movie = ->
 				con.release()
 				#error check if succesful query or not
 				if err
-					res.send
-						status: 1
-						message: 'failed creating movie review'
+					return res.status(403).send(
+						success: false
+						message: 'failed creating movie review')
 				else
 					res.send
-						status: 0
+						success: true
 						message: 'movie review created successfully'
 				return
 			return
@@ -61,12 +61,12 @@ Movie = ->
 				con.release()
 				#error check if successful query or not
 				if err
-					res.send
-						status: 1
-						message: 'failed updating movie review'
+					return res.status(403).send(
+						success: false
+						message: 'failed updating movie review')
 				else
 					res.send
-						status: 0
+						success: true
 						message: 'movie review updated successfully'
 				return
 			return
@@ -80,12 +80,12 @@ Movie = ->
 				con.release()
 				#error check if successful query or not
 				if err
-					res.send
-						status: 1
-						message: 'failed deleting movie review'
+					return res.status(403).send(
+						success: false
+						message: 'failed deleting movie review')
 				else
 					res.send
-						status: 0
+						success: true
 						message: 'movie review deleted successfully'
 				return
 			return

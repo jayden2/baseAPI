@@ -32,13 +32,13 @@ function Movie() {
       con.query('INSERT INTO movies (title, rating, description, review, cover, year, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)', [movie.title, movie.rating, movie.description, movie.review, movie.cover, movie.year, movie.user_id], function(err, result) {
         con.release();
         if (err) {
-          res.send({
-            status: 1,
+          return res.status(403).send({
+            success: false,
             message: 'failed creating movie review'
           });
         } else {
           res.send({
-            status: 0,
+            success: true,
             message: 'movie review created successfully'
           });
         }
@@ -50,13 +50,13 @@ function Movie() {
       con.query('UPDATE movies SET title = ?, rating = ?, description = ?, review = ?, cover = ?, year = ? WHERE id = ?', [movie.title, movie.rating, movie.description, movie.review, movie.cover, movie.year, id], function(err, result) {
         con.release();
         if (err) {
-          res.send({
-            status: 1,
+          return res.status(403).send({
+            success: false,
             message: 'failed updating movie review'
           });
         } else {
           res.send({
-            status: 0,
+            success: true,
             message: 'movie review updated successfully'
           });
         }
@@ -68,13 +68,13 @@ function Movie() {
       con.query('DELETE FROM movies WHERE id = ?', [id], function(err, result) {
         con.release();
         if (err) {
-          res.send({
-            status: 1,
+          return res.status(403).send({
+            success: false,
             message: 'failed deleting movie review'
           });
         } else {
           res.send({
-            status: 0,
+            success: true,
             message: 'movie review deleted successfully'
           });
         }
