@@ -36,7 +36,7 @@ Movie = ->
 	#do connection, insert movie data into database
 	@createMovie = (movie, res) ->
 		connection.acquire (err, con) ->
-			con.query 'INSERT INTO movies (title, rating, description, review, cover, year, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
+			con.query 'INSERT INTO movies (title, rating, description, score, review, cover, year, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
 			[movie.title, movie.rating, movie.description, movie.review, movie.cover, movie.year, movie.user_id], (err, result) ->
 				con.release()
 				#error check if succesful query or not
@@ -56,8 +56,8 @@ Movie = ->
 	#do connection, update movie item with id
 	@updateMovie = (movie, id, res) ->
 		connection.acquire (err, con) ->
-			con.query 'UPDATE movies SET title = ?, rating = ?, description = ?, review = ?, cover = ?, year = ? WHERE id = ?',
-			[movie.title, movie.rating, movie.description, movie.review, movie.cover, movie.year, id], (err, result) ->
+			con.query 'UPDATE movies SET title = ?, rating = ?, description = ?, score = ?, review = ?, cover = ?, year = ? WHERE id = ?',
+			[movie.title, movie.rating, movie.description, movie.score, movie.review, movie.cover, movie.year, id], (err, result) ->
 				con.release()
 				#error check if successful query or not
 				if err

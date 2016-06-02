@@ -29,7 +29,7 @@ function Movie() {
   };
   this.createMovie = function(movie, res) {
     connection.acquire(function(err, con) {
-      con.query('INSERT INTO movies (title, rating, description, review, cover, year, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)', [movie.title, movie.rating, movie.description, movie.review, movie.cover, movie.year, movie.user_id], function(err, result) {
+      con.query('INSERT INTO movies (title, rating, description, score, review, cover, year, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [movie.title, movie.rating, movie.description, movie.review, movie.cover, movie.year, movie.user_id], function(err, result) {
         con.release();
         if (err) {
           return res.status(403).send({
@@ -47,7 +47,7 @@ function Movie() {
   };
   this.updateMovie = function(movie, id, res) {
     connection.acquire(function(err, con) {
-      con.query('UPDATE movies SET title = ?, rating = ?, description = ?, review = ?, cover = ?, year = ? WHERE id = ?', [movie.title, movie.rating, movie.description, movie.review, movie.cover, movie.year, id], function(err, result) {
+      con.query('UPDATE movies SET title = ?, rating = ?, description = ?, score = ?, review = ?, cover = ?, year = ? WHERE id = ?', [movie.title, movie.rating, movie.description, movie.score, movie.review, movie.cover, movie.year, id], function(err, result) {
         con.release();
         if (err) {
           return res.status(403).send({
