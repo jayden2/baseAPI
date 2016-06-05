@@ -8,7 +8,7 @@ connection = require('../connection');
 
 secretPassword = 'superSpecialSecretPasswordThatNooneWouldEverGuess1';
 
-User = function() {
+function User() {
   var hashPassword;
   this.getAllUsers = function(res) {
     connection.acquire(function(err, con) {
