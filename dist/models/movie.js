@@ -29,7 +29,7 @@ function Movie() {
   };
   this.createMovie = function(movie, res) {
     connection.acquire(function(err, con) {
-      con.query('INSERT INTO movies (title, rating, description, score, review, cover, year, genre, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [movie.title, movie.rating, movie.description, movie.review, movie.cover, movie.year, movie.genre, movie.user_id], function(err, result) {
+      con.query('INSERT INTO movies (title, rating, description, score, review, cover, year, genre, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [movie.title, movie.rating, movie.description, movie.score, movie.review, movie.cover, movie.year, movie.genre, movie.user_id], function(err, result) {
         con.release();
         if (err) {
           return res.status(403).send({
