@@ -6,7 +6,7 @@ Movie = ->
 	#do connection, select all from movies
 	@getAllMovies = (res) ->
 		connection.acquire (err, con) ->
-			con.query 'SELECT * FROM movies', (err, result) ->
+			con.query 'SELECT * FROM movies ORDER BY updated_at DESC', (err, result) ->
 				con.release()
 				res.send result
 				return
@@ -36,8 +36,9 @@ Movie = ->
 	#do connection, insert movie data into database
 	@createMovie = (movie, res) ->
 		connection.acquire (err, con) ->
-			con.query 'INSERT INTO movies (title, rating, description, score, review, cover, year, genre, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-			[movie.title, movie.rating, movie.description, movie.score, movie.review, movie.cover, movie.year, movie.genre, movie.user_id], (err, result) ->
+			timenow = new Date()
+			con.query 'INSERT INTO movies (title, rating, description, score, review, cover, year, genre, user_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+			[movie.title, movie.rating, movie.description, movie.score, movie.review, movie.cover, movie.year, movie.genre, movie.user_id, moment(timenow).format 'YYYY-MM-DD HH:mm:ss'], (err, result) ->
 				con.release()
 				#error check if succesful query or not
 				if err
