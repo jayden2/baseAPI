@@ -1,6 +1,8 @@
-var Movie, connection;
+var Movie, connection, moment;
 
 connection = require('../connection');
+
+moment = require('moment');
 
 function Movie() {
   this.getAllMovies = function(res) {
@@ -31,7 +33,8 @@ function Movie() {
     connection.acquire(function(err, con) {
       var timenow;
       timenow = new Date();
-      con.query('INSERT INTO movies (title, rating, description, score, review, cover, year, genre, user_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [movie.title, movie.rating, movie.description, movie.score, movie.review, movie.cover, movie.year, movie.genre, movie.user_id, moment(timenow).format('YYYY-MM-DD HH:mm:ss')], function(err, result) {
+      timenow = moment(timenow).format('YYYY-MM-DD HH:mm:ss');
+      con.query('INSERT INTO movies (title, rating, description, score, review, cover, year, genre, user_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [movie.title, movie.rating, movie.description, movie.score, movie.review, movie.cover, movie.year, movie.genre, movie.user_id, timenow], function(err, result) {
         con.release();
         if (err) {
           return res.status(403).send({
