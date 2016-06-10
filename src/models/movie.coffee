@@ -1,4 +1,5 @@
 connection = require '../connection'
+moment = require 'moment'
 #get, create, update and delte
 #function Movie() {
 Movie = ->
@@ -37,8 +38,9 @@ Movie = ->
 	@createMovie = (movie, res) ->
 		connection.acquire (err, con) ->
 			timenow = new Date()
+			timenow = moment(timenow).format 'YYYY-MM-DD HH:mm:ss'
 			con.query 'INSERT INTO movies (title, rating, description, score, review, cover, year, genre, user_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-			[movie.title, movie.rating, movie.description, movie.score, movie.review, movie.cover, movie.year, movie.genre, movie.user_id, moment(timenow).format 'YYYY-MM-DD HH:mm:ss'], (err, result) ->
+			[movie.title, movie.rating, movie.description, movie.score, movie.review, movie.cover, movie.year, movie.genre, movie.user_id, timenow], (err, result) ->
 				con.release()
 				#error check if succesful query or not
 				if err
