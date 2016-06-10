@@ -57,6 +57,9 @@ function User() {
             res.send({
               success: true,
               message: 'Token Get!',
+              id: result[0].id,
+              email: result[0].email,
+              username: result[0].username,
               token: token
             });
           }
