@@ -15,6 +15,10 @@ module.exports = configure: (app, router) ->
 	router.post '/users/', (req, res) ->
 		user.createUser req.body, re
 
+	#checkValidEmail
+	router.get '/users/:email/check/', (req, res) ->
+		user.checkValidEmail req.params.email, res
+
 	#api middleware for all requests
 	router.use (req, res, next) ->
 		user.verifyUser req, res, next
@@ -30,10 +34,6 @@ module.exports = configure: (app, router) ->
 	#get 1 user
 	router.get '/users/:id/', (req, res) ->
 		user.getSingleUser req.params.id, res
-	
-	#checkValidEmail
-	router.get '/users/:email/check/', (req, res) ->
-		user.checkValidEmail req.params.email, res
 	
 	#update user
 	router.put '/users/:id/', (req, res) ->
